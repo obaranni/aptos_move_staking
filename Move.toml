@@ -1,0 +1,16 @@
+[package]
+name = 'staking'
+version = '1.0.0'
+
+[addresses]
+staking_admin = "0xee89c702cc7237f637be750dd110460ec8b2521e7cb69ec2c7d05074e469d55d"
+
+[dependencies.AptosFramework]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'main'
+subdir = 'aptos-move/framework/aptos-framework'
+
+[dependencies.LIQCoin]
+git = 'https://github.com/obaranni/aptos_move_coin.git'
+rev = 'main'
+subdir = '.'
