@@ -21,7 +21,7 @@ module staking_admin::staking {
     const ERR_NOT_ENOUGH_BALANCE: u64 = 103;
 
     // only admin can execute
-    const ERR_ONLY_ADMIN_CAN: u64 = 104;
+    const ERR_NO_PERMISSIONS: u64 = 104;
 
     /// Core data structures
     struct StakePool<phantom CoinType> has key {
@@ -36,7 +36,7 @@ module staking_admin::staking {
     //
 
     public entry fun initialize<CoinType>(pool_admin: &signer) {
-        assert!(signer::address_of(pool_admin) == @staking_admin, ERR_ONLY_ADMIN_CAN);
+        assert!(signer::address_of(pool_admin) == @staking_admin, ERR_NO_PERMISSIONS);
         assert!(!exists<StakePool<CoinType>>(@staking_admin), ERR_POOL_ALREADY_EXISTS);
 
         move_to(
