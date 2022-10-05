@@ -12,22 +12,21 @@ module staking_admin::staking_tests {
         let new_acc = account::create_account_for_test(account_address);
         let new_addr = signer::address_of(&new_acc);
 
-        (
-            new_acc,
-            new_addr,
-        )
+        (new_acc, new_addr)
     }
 
-    public fun create_account_with_liq_coins(account_address: address, liq_amount: u64, coin_creator_acc: &signer): (signer, address) {
+    public fun create_account_with_liq_coins(
+        account_address: address,
+        liq_amount: u64,
+        coin_creator_acc: &signer
+    ): (signer, address) {
         let (new_acc, new_addr) = create_account(account_address);
         let coins = liq::mint(coin_creator_acc, liq_amount);
 
         coin::register<LIQCoin>(&new_acc);
         coin::deposit<LIQCoin>(new_addr, coins);
-        (
-            new_acc,
-            new_addr,
-        )
+
+        (new_acc, new_addr)
     }
 
     public fun create_coin(creator_addr: address): signer {
@@ -45,8 +44,10 @@ module staking_admin::staking_tests {
         let coin_creator_acc = create_coin(@coin_creator);
 
         // mint coins for alice and bob
-        let (alice_acc, alice_addr) = create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
-        let (bob_acc, bob_addr) = create_account_with_liq_coins(@0x11, 40, &coin_creator_acc);
+        let (alice_acc, alice_addr) =
+            create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
+        let (bob_acc, bob_addr) =
+            create_account_with_liq_coins(@0x11, 40, &coin_creator_acc);
 
         // initialize staking pool
         staking::initialize<LIQCoin>(&staking_admin_acc);
@@ -99,7 +100,8 @@ module staking_admin::staking_tests {
         let coin_creator_acc= create_coin(@coin_creator);
 
         // mint coins for alice
-        let (alice_acc, _) = create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
+        let (alice_acc, _) =
+            create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
 
         // stake from alice
         let coins = coin::withdraw<LIQCoin>(&alice_acc, 33);
@@ -163,7 +165,8 @@ module staking_admin::staking_tests {
         let coin_creator_acc = create_coin(@coin_creator);
 
         // mint coins for alice
-        let (alice_acc, alice_addr) = create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
+        let (alice_acc, alice_addr) =
+            create_account_with_liq_coins(@0x10, 150, &coin_creator_acc);
 
         // initialize staking pool
         staking::initialize<LIQCoin>(&staking_admin_acc);
