@@ -20,6 +20,9 @@ module staking_admin::staking {
     // not enough balance
     const ERR_NOT_ENOUGH_BALANCE: u64 = 103;
 
+    // only admin can execute
+    const ERR_ONLY_ADMIN_CAN: u64 = 104;
+
     /// Core data structures
     struct StakePool<phantom CoinType> has key {
         // total staked
@@ -33,13 +36,14 @@ module staking_admin::staking {
     //
 
     public entry fun initialize<CoinType>(pool_admin: &signer) {
+        assert!(signer::address_of(pool_admin) == @staking_admin, ERR_ONLY_ADMIN_CAN);
         assert!(!exists<StakePool<CoinType>>(@staking_admin), ERR_POOL_ALREADY_EXISTS);
 
-        move_to<StakePool<CoinType>>(
+        move_to(
             pool_admin,
-            StakePool {
+            StakePool<CoinType> {
                 total: 0,
-                ledger: table::new<address, Coin<CoinType>>(),
+                ledger: table::new(),
             }
         );
     }
@@ -61,7 +65,7 @@ module staking_admin::staking {
         if (table::contains(&pool.ledger, user_address)) {
             coin::value(table::borrow(&pool.ledger, user_address))
         } else {
-            return 0
+            0
         }
     }
 

@@ -13,4 +13,3 @@ subdir = 'aptos-move/framework/aptos-framework'
 [dependencies.LIQCoin]
 git = 'https://github.com/obaranni/aptos_move_coin.git'
 rev = 'main'
-subdir = '.'

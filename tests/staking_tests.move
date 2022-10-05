@@ -171,4 +171,13 @@ module staking_admin::staking_tests {
         let coins = staking::unstake<LIQCoin>(&alice_acc, 151);
         coin::deposit<LIQCoin>(signer::address_of(&alice_acc), coins);
     }
+
+    #[test]
+    #[expected_failure(abort_code = 104 /* ERR_ONLY_ADMIN_CAN */)]
+    public fun test_initialize_fails_if_executed_not_by_admin() {
+        let alice_acc = account::create_account_for_test(@0x10);
+
+        // initialize staking pool
+        staking::initialize<LIQCoin>(&alice_acc);
+    }
 }
